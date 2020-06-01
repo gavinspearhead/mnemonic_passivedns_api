@@ -64,7 +64,7 @@ class Mnemonic:
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; rv:68.0) Gecko/20100101 Firefox/68.0"
     }
 
-    def __call__(self, search_term):
+    def __call__(self, search_term, limit=100):
         data = {
             "query": search_term,
             "aggregateResult": True,
@@ -74,7 +74,7 @@ class Mnemonic:
             "customerID": [],
             "tlp": [],
             "offset": 0,
-            "limit": 25000
+            "limit": limit
         }
         res = requests.post(self.url, headers=self.headers, json=data)
         if res.status_code == 200:
@@ -89,6 +89,6 @@ if __name__ == "__main__":
     search_term = sys.argv[1]
 
     m = Mnemonic()
-    res = m(search_term)
+    res = m(search_term, 1000)
     for x in res:
         print(x.lastseen, x.firstseen, x.answer, x.query, x.rrtype)
